@@ -54,6 +54,12 @@ export const metadata: Metadata = {
   description: "Pitch, Vote and Grow",
 };
 
+/**
+ * Application root layout that renders a complete HTML document and applies the configured Work Sans font.
+ *
+ * @param children - React nodes to render inside the document body
+ * @returns The root HTML element containing a body with `children` and the Work Sans font class applied
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
