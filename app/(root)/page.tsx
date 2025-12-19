@@ -1,6 +1,12 @@
 import SearchForm from "@/components/SearchForm";
 import StartupCard from "@/components/StartupCard";
 
+/**
+ * Render the Home page containing a search form and a list of startups based on the provided search query.
+ *
+ * @param searchParams - A promise that resolves to an object with an optional `query` string used to determine search results.
+ * @returns A React fragment with a hero section (heading, subheading, SearchForm) and a results section that shows either `Search results for "<query>"` or `All Startups`, and a list of `StartupCard` items when posts exist or a "No startups" message when none are available.
+ */
 export default async function Home({
   searchParams,
 }: {

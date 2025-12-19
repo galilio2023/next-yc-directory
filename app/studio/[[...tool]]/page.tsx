@@ -14,6 +14,11 @@ export const dynamic = 'force-static'
 
 export { metadata, viewport } from 'next-sanity/studio'
 
+/**
+ * Next.js page component that renders the configured Sanity Studio.
+ *
+ * @returns A React element that renders the Sanity Studio using the imported `config`.
+ */
 export default function StudioPage() {
   return <NextStudio config={config} />
 }
