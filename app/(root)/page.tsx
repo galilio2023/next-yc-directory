@@ -1,4 +1,5 @@
 import SearchForm from "@/components/SearchForm";
+import StartupCard from "@/components/StartupCard";
 
 export default async function Home({
   searchParams,
@@ -6,6 +7,19 @@ export default async function Home({
   searchParams: Promise<{ query?: string }>;
 }) {
   const query = (await searchParams).query;
+
+  const posts = [
+    {
+      _createdAt: new Date(),
+      views: 55,
+      author: { _id: 1, name: "Ibrahim" },
+      _id: 1,
+      description: "This is a description",
+      image: "https://images.pexels.com/photos/140945/pexels-photo-140945.jpeg",
+      category: "Robots",
+      title: "We Robots",
+    },
+  ];
   return (
     <>
       <section className="pink_container">
@@ -17,6 +31,20 @@ export default async function Home({
           Submit Ideas, Vote on Pitches, and Get Noticed in virtual
         </p>
         <SearchForm query={query} />
+      </section>
+      <section className="section_container">
+        <p className="text-30-semibold">
+          {query ? `Search results for "${query}"` : "All Startups"}
+        </p>
+        <ul className="mt-7 card_grid">
+          {posts.length > 0 ? (
+            posts.map((post: StartupCardType, index: number) => (
+              <StartupCard key={post?._id} post={post} />
+            ))
+          ) : (
+            <p className="no-results">No startups</p>
+          )}
+        </ul>
       </section>
     </>
   );
