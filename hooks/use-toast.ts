@@ -27,6 +27,11 @@ const actionTypes = {
 
 let count = 0
 
+/**
+ * Produces a new sequential string ID for toasts.
+ *
+ * @returns The next numeric ID as a string; IDs increment sequentially and wrap to "0" after reaching Number.MAX_SAFE_INTEGER.
+ */
 function genId() {
   count = (count + 1) % Number.MAX_SAFE_INTEGER
   return count.toString()
@@ -133,6 +138,13 @@ const listeners: Array<(state: State) => void> = []
 
 let memoryState: State = { toasts: [] }
 
+/**
+ * Apply an action to the global toast state and notify all subscribers.
+ *
+ * Updates the in-memory state by passing `action` to the reducer, then calls each registered listener with the new state.
+ *
+ * @param action - The action describing the state change to apply
+ */
 function dispatch(action: Action) {
   memoryState = reducer(memoryState, action)
   listeners.forEach((listener) => {
@@ -142,6 +154,17 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, "id">
 
+/**
+ * Creates and displays a new toast and returns controls to manage it.
+ *
+ * The created toast is assigned a unique id and opened immediately; it will be dismissed when its open state becomes false.
+ *
+ * @param props - Initial toast properties (for example: `title`, `description`, `action`, and other ToastProps)
+ * @returns An object containing:
+ *  - `id`: the generated toast id
+ *  - `dismiss`: function to dismiss this toast
+ *  - `update`: function to update this toast's properties
+ */
 function toast({ ...props }: Toast) {
   const id = genId()
 
@@ -171,6 +194,11 @@ function toast({ ...props }: Toast) {
   }
 }
 
+/**
+ * Provides the current toast state and helper functions for creating and dismissing toasts.
+ *
+ * @returns An object containing the current toast state properties (spread from memory state), a `toast` function to create a new toast, and a `dismiss` function that dismisses the toast with the given id or dismisses all toasts when called without an id.
+ */
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState)
 

@@ -4,6 +4,12 @@ import { STARTUPS_QUERY } from "@/sanity/lib/queries";
 import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 import { auth } from "@/auth";
 
+/**
+ * Renders the Home page with a pitch-focused header, a search form, and a list of startups filtered by the provided query.
+ *
+ * @param searchParams - A promise that resolves to an object containing an optional `query` string used to filter startup results.
+ * @returns The React element for the Home page, including header, search form, startup cards (or a no-results message), and a live updates component.
+ */
 export default async function Home({
   searchParams,
 }: {
