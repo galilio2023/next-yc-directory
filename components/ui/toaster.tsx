@@ -10,6 +10,11 @@ import {
   ToastViewport,
 } from "@/components/ui/toast"
 
+/**
+ * Renders a client-side toast container that displays toasts from the `useToast` hook.
+ *
+ * @returns A React element containing a `ToastProvider` which maps current toasts to `Toast` components (each optionally showing a title, description, and action, and including a close control) and a `ToastViewport`.
+ */
 export function Toaster() {
   const { toasts } = useToast()
 
