@@ -1,8 +1,13 @@
-import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import React from "react";
 import "easymde/dist/easymde.min.css";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "YC Directory",
+  description: "Pitch, Vote and Grow",
+};
 
 const workSans = localFont({
   src: [
@@ -49,11 +54,6 @@ const workSans = localFont({
   ],
   variable: "--font-work-sans",
 });
-
-export const metadata: Metadata = {
-  title: "YC Directory",
-  description: "Pitch, Vote and Grow",
-};
 
 export default function RootLayout({
   children,
