@@ -9,13 +9,13 @@ const View = async ({ id }: { id: string }) => {
   const { views: totalViews } = await client
     .withConfig({ useCdn: false })
     .fetch(STARTUP_VIEWS_QUERY, { id });
-  after(
-    async () =>
-      await writeClient
-        .patch(id)
-        .set({ views: totalViews + 1 })
-        .commit(),
-  );
+  after(async () => {
+    try {
+      await writeClient.patch(id).inc({ views: 1 }).commit();
+    } catch (error) {
+      console.error("Failed to increment view count:", error);
+    }
+  });
   return (
     <div className="view-container">
       <div className="absolute -top-2 -right-2">
