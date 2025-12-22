@@ -36,7 +36,8 @@
     "server-only": "^0.0.1",
     "styled-components": "^6.1.19",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",

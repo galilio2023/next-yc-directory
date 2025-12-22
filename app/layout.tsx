@@ -3,6 +3,7 @@ import "./globals.css";
 import React from "react";
 import "easymde/dist/easymde.min.css";
 import { Metadata } from "next";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "YC Directory",
@@ -62,7 +63,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={workSans.variable}>{children}</body>
+      <body className={workSans.variable}>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }
