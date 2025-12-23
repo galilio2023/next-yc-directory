@@ -11,6 +11,13 @@ class SentryExampleFrontendError extends Error {
   }
 }
 
+/**
+ * Render a client-side demo page that demonstrates Sentry frontend integration and provides a button to trigger a sample frontend error.
+ *
+ * The component logs a page-load event, diagnoses Sentry SDK connectivity (disabling the trigger button if unreachable), wraps an API fetch in a Sentry span when the user clicks the button, updates local state if the backend response is not OK, and finally throws a sample frontend error.
+ *
+ * @returns The React element for the Sentry example page.
+ */
 export default function Page() {
   const [hasSentError, setHasSentError] = useState(false);
   const [isConnected, setIsConnected] = useState(true);
