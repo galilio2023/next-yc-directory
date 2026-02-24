@@ -1,10 +1,13 @@
 import { createClient } from "next-sanity";
-
 import { apiVersion, dataset, projectId } from "../env";
 
+if (!projectId) {
+  console.error("Sanity Project ID is missing. Please check your environment variables.");
+}
+
 export const client = createClient({
-  projectId,
-  dataset,
-  apiVersion,
-  useCdn: true, // Set to false if statically generating pages, using ISR or tag-based revalidation
+  projectId: projectId || "temporary-id-for-build",
+  dataset: dataset || "production",
+  apiVersion: apiVersion || "2024-01-01",
+  useCdn: true,
 });
