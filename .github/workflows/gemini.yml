@@ -37,11 +37,19 @@ jobs:
 
           async function run() {
             const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-            const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+            // Using gemini-2.0-flash as requested (assuming 2.0 for the latest Flash model)
+            const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
             // Get the diff of the PR
-            const diff = execSync('git diff origin/main...HEAD').toString();
-            if (!diff) {
+            let diff;
+            try {
+              diff = execSync('git diff origin/main...HEAD').toString();
+            } catch (e) {
+              console.log('Error getting diff, trying alternative...');
+              diff = execSync('git diff HEAD^ HEAD').toString();
+            }
+
+            if (!diff || diff.trim().length === 0) {
               console.log('No changes to review.');
               return;
             }
@@ -64,9 +72,15 @@ jobs:
             // Post the review as a comment on the PR
             const prNumber = process.env.GITHUB_EVENT_PATH ? require(process.env.GITHUB_EVENT_PATH).number : null;
             if (prNumber) {
-              const body = JSON.stringify({ body: '### 🤖 Loom AI Architect Review\n\n' + text });
+              const body = JSON.stringify({ body: '### 🤖 Loom AI Architect Review (Gemini 2.0 Flash)\n\n' + text });
               execSync(\`curl -s -H \"Authorization: token \${process.env.GITHUB_TOKEN}\" -X POST -d '\${body}' https://api.github.com/repos/\${process.env.GITHUB_REPOSITORY}/issues/\${prNumber}/comments\`);
+              console.log('Review comment posted successfully.');
+            } else {
+              console.log('PR number not found, review text:', text);
             }
           }
-          run().catch(err => { console.error(err); process.exit(1); });
+          run().catch(err => { 
+            console.error('Error during AI review:', err); 
+            process.exit(1); 
+          });
           "
