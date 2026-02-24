@@ -36,7 +36,6 @@ jobs:
 
           async function run() {
             const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-            // Using gemini-2.5-flash as requested
             const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
             let diff;
@@ -68,9 +67,24 @@ jobs:
 
             const prNumber = process.env.GITHUB_EVENT_PATH ? require(process.env.GITHUB_EVENT_PATH).number : null;
             if (prNumber) {
-              const body = JSON.stringify({ body: '### 🤖 Loom AI Architect Review (Gemini 2.5 Flash)\n\n' + text });
-              execSync(\`curl -s -H \"Authorization: token \${process.env.GITHUB_TOKEN}\" -X POST -d '\${body}' https://api.github.com/repos/\${process.env.GITHUB_REPOSITORY}/issues/\${prNumber}/comments\`);
-              console.log('Review comment posted successfully.');
+              const url = \`https://api.github.com/repos/\${process.env.GITHUB_REPOSITORY}/issues/\${prNumber}/comments\`;
+              const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                  'Authorization': \`token \${process.env.GITHUB_TOKEN}\`,
+                  'Content-Type': 'application/json',
+                  'User-Agent': 'node-fetch'
+                },
+                body: JSON.stringify({ body: '### 🤖 Loom AI Architect Review (Gemini 2.5 Flash)\n\n' + text })
+              });
+
+              if (response.ok) {
+                console.log('Review comment posted successfully.');
+              } else {
+                const errorText = await response.text();
+                console.error('Failed to post comment:', response.status, errorText);
+                process.exit(1);
+              }
             }
           }
           run().catch(err => { 

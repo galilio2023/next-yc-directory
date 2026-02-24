@@ -48,11 +48,16 @@ const StartupForm = () => {
       return result;
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const fieldErrors = error.flatten().fieldErrors;
+        const fieldErrors = error.flatten().fieldErrors as Record<string, string[]>;
         const newErrors: Record<string, string> = {};
+        
         for (const key in fieldErrors) {
-          newErrors[key] = fieldErrors[key]?.[0] ?? "";
+          const messages = fieldErrors[key];
+          if (messages && messages.length > 0) {
+            newErrors[key] = messages[0];
+          }
         }
+
         setErrors(newErrors);
         toast({
           title: "Validation Error",
@@ -78,7 +83,6 @@ const StartupForm = () => {
     status: "INITIAL",
   });
 
-  // Suppress unused warning for state if needed, or use it for global error display
   const globalError = state.status === "ERROR" ? state.error : null;
 
   return (
