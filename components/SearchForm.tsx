@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import SearchFormReset from "@/components/SearchFormReset";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const SearchForm = ({ query: initialQuery }: { query?: string }) => {
@@ -45,7 +44,7 @@ const SearchForm = ({ query: initialQuery }: { query?: string }) => {
             onClick={() => setQuery("")}
             className="size-10 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white"
           >
-            <SearchFormReset />
+            <X className="size-5" />
           </Button>
         )}
         <Button

@@ -71,10 +71,11 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
       <section className="container mx-auto px-6 py-20">
         <div className="max-w-6xl mx-auto">
           <div className="relative aspect-video w-full overflow-hidden rounded-[2.5rem] border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] mb-20">
-            <img
-              src={post.image}
-              alt={post.title}
-              className="h-full w-full object-cover"
+            <Image
+              src={post.image || "https://placehold.co/600x400"}
+              alt={post.title || "Startup Image"}
+              fill
+              className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent" />
           </div>

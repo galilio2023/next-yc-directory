@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { auth, signIn, signOut } from "@/auth";
 import { BadgePlus, LogIn, LogOut, Layers, User } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -43,10 +44,20 @@ const Navbar = async () => {
                 </form>
 
                 <Link href={`/user/${session.user.id}`} className="transition-transform hover:scale-105">
-                  <Avatar className="size-10 border-2 border-primary/20 bg-slate-900">
-                    <AvatarFallback className="bg-slate-900 text-slate-400">
-                      <User className="size-5" />
-                    </AvatarFallback>
+                  <Avatar className="size-10 border-2 border-primary/20 bg-slate-900 overflow-hidden">
+                    {session.user.image ? (
+                      <Image 
+                        src={session.user.image} 
+                        alt={session.user.name || "User Avatar"} 
+                        width={40} 
+                        height={40} 
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <AvatarFallback className="bg-slate-900 text-slate-400">
+                        <User className="size-5" />
+                      </AvatarFallback>
+                    )}
                   </Avatar>
                 </Link>
               </>
