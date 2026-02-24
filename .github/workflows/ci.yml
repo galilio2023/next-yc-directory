@@ -7,20 +7,16 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  quality-and-build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [20.x]
 
     steps:
     - uses: actions/checkout@v4
     
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js 20.x
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 20.x
         cache: 'npm'
         
     - name: Install dependencies
@@ -29,10 +25,12 @@ jobs:
     - name: Run Linting
       run: npm run lint
       
-    - name: Build Check
+    - name: Run Type Check
+      run: npx tsc --noEmit
+      
+    - name: Production Build Check
       run: npm run build
       env:
-        # These are needed for the build check to pass
         AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
         AUTH_GITHUB_ID: ${{ secrets.AUTH_GITHUB_ID }}
         AUTH_GITHUB_SECRET: ${{ secrets.AUTH_GITHUB_SECRET }}
