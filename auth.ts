@@ -17,13 +17,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const existingUser = await client
           .withConfig({ useCdn: false })
           .fetch(AUTHOR_BY_GITHUB_ID_QUERY, {
-            id,
+            id: Number(id),
           });
 
         if (!existingUser) {
           await writeClient.create({
             _type: "author",
-            id,
+            id: Number(id),
             name,
             username: login,
             email,
@@ -44,9 +44,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const user = await client
             .withConfig({ useCdn: false })
             .fetch(AUTHOR_BY_GITHUB_ID_QUERY, {
-              id: profile.id,
+              id: Number(profile.id),
             });
-          token.id = user?._id;
+          
+          if (user) {
+            token.id = user._id;
+          }
         } catch (error) {
           console.error("Error in JWT callback:", error);
         }
@@ -54,7 +57,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      Object.assign(session, { id: token.id });
+      if (session.user) {
+        session.user.id = token.id as string;
+      }
       return session;
     },
   },
