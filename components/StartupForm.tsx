@@ -1,6 +1,6 @@
 "use client";
 
-import MDEditor from "@uiw/react-md-editor";
+import dynamic from "next/dynamic";
 import { Input } from "@/components/ui/input";
 import { useActionState, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,6 +11,8 @@ import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { createPitch } from "@/lib/actions";
+
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 const StartupForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});

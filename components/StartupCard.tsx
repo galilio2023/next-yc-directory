@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { formatDate } from "@/lib/utils";
 import { EyeIcon, ArrowUpRight, User, Calendar, Tag } from "lucide-react";
@@ -7,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Author, Startup } from "@/sanity/types";
 import { Skeleton } from "@/components/ui/skeleton";
-import { motion } from "framer-motion";
+import { MotionLi } from "./MotionWrapper";
 
 export type StartupCardType = Omit<Startup, "author"> & { author?: Author };
 
@@ -24,7 +22,7 @@ const StartupCard = ({ post }: { post: StartupCardType }) => {
   } = post;
 
   return (
-    <motion.li
+    <MotionLi
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
@@ -97,7 +95,7 @@ const StartupCard = ({ post }: { post: StartupCardType }) => {
           </div>
         </div>
       </div>
-    </motion.li>
+    </MotionLi>
   );
 };
 

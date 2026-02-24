@@ -11,7 +11,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (!user || !profile) return false;
 
       const { name, email, image } = user;
-      const { id, login, bio } = profile as any;
+      const { id, login, bio } = profile;
 
       try {
         const existingUser = await client
@@ -28,7 +28,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             username: login,
             email,
             image,
-            bio: bio || "",
+            bio: (bio as string) || "",
           });
         }
 
