@@ -1,4 +1,4 @@
-name: Gemini AI Code Review
+name: Loom AI Code Review
 
 on:
   pull_request:
@@ -15,17 +15,58 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
-
-      - name: Gemini AI Reviewer
-        uses: google-gemini/gemini-github-action@v1.1.0
         with:
-          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
-          model: "gemini-2.5-flash"
-          # Custom prompt for the Senior Architect persona
-          prompt: |
-            Act as a Senior Software Architect. Review the following code changes for:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install @google/generative-ai
+
+      - name: Run Gemini AI Review
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node -e "
+          const { GoogleGenerativeAI } = require('@google/generative-ai');
+          const { execSync } = require('child_process');
+
+          async function run() {
+            const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+            const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+            // Get the diff of the PR
+            const diff = execSync('git diff origin/main...HEAD').toString();
+            if (!diff) {
+              console.log('No changes to review.');
+              return;
+            }
+
+            const prompt = \`Act as a Senior Software Architect. Review the following code changes for:
             1. Architectural consistency with Next.js 15 and App Router patterns.
             2. Performance bottlenecks (unnecessary re-renders, large client components).
             3. Security vulnerabilities (exposed secrets, unsafe data handling).
-            4. Adherence to the "Loom" premium design system (Tailwind usage).
+            4. Adherence to the 'Loom' premium design system (Tailwind usage).
+            
             Provide constructive feedback and suggest specific improvements.
+            
+            Code Diff:
+            \${diff}\`;
+
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            const text = response.text();
+
+            // Post the review as a comment on the PR
+            const prNumber = process.env.GITHUB_EVENT_PATH ? require(process.env.GITHUB_EVENT_PATH).number : null;
+            if (prNumber) {
+              const body = JSON.stringify({ body: '### 🤖 Loom AI Architect Review\n\n' + text });
+              execSync(\`curl -s -H \"Authorization: token \${process.env.GITHUB_TOKEN}\" -X POST -d '\${body}' https://api.github.com/repos/\${process.env.GITHUB_REPOSITORY}/issues/\${prNumber}/comments\`);
+            }
+          }
+          run().catch(err => { console.error(err); process.exit(1); });
+          "
