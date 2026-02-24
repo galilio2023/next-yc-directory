@@ -36,7 +36,7 @@ declare module "next-auth" {
     email?: string;
     avatar_url?: string;
     bio?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   }
 }
 
@@ -46,28 +46,3 @@ declare module "@auth/core/jwt" {
     id?: string;
   }
 }
-// declare module "next-auth" {
-//   interface Session {
-//     id: string;
-//   }
-//   interface Jwt {
-//     id: string;
-//   }
-// }
-// types/next-auth.d.ts
-// import "next-auth";
-// import { DefaultSession } from "next-auth";
-//
-// declare module "next-auth" {
-//   interface Session {
-//     user: {
-//       id: string;
-//     } & DefaultSession["user"];
-//   }
-// }
-//
-// declare module "@auth/core/jwt" {
-//   interface JWT {
-//     id?: string;
-//   }
-// }

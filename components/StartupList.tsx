@@ -20,7 +20,7 @@ async function StartupList({ query }: { query?: string }) {
           </div>
           <h2 className="text-3xl font-black tracking-tight text-white">
             {query ? (
-              <>Search results for <span className="text-primary">"{query}"</span></>
+              <>Search results for <span className="text-primary">&quot;{query}&quot;</span></>
             ) : (
               "Explore Startups"
             )}
@@ -45,7 +45,7 @@ async function StartupList({ query }: { query?: string }) {
           </div>
           <h3 className="text-2xl font-black text-white">No startups found</h3>
           <p className="mt-4 text-slate-500 max-w-sm mx-auto text-lg">
-            We couldn't find any startups matching your search. Try using different keywords or explore all pitches.
+            We couldn&apos;t find any startups matching your search. Try using different keywords or explore all pitches.
           </p>
         </div>
       )}

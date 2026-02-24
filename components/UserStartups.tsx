@@ -20,7 +20,7 @@ const UserStartups = async ({ id }: { id: string }) => {
           </div>
           <h3 className="text-xl font-bold text-white">No startups yet</h3>
           <p className="mt-2 text-slate-500 max-w-xs mx-auto">
-            This founder hasn't launched any pitches yet. Check back soon!
+            This founder hasn&apos;t launched any pitches yet. Check back soon!
           </p>
         </div>
       )}
