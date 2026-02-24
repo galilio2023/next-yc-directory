@@ -24,6 +24,7 @@ export const startup = defineType({
     defineField({
       name: "views",
       type: "number",
+      initialValue: 0,
     }),
     defineField({
       name: "description",
@@ -43,6 +44,12 @@ export const startup = defineType({
     defineField({
       name: "pitch",
       type: "markdown",
+    }),
+    defineField({
+      name: "isFeatured",
+      title: "Featured on Home Page",
+      type: "boolean",
+      initialValue: false,
     }),
   ],
 });

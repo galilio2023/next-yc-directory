@@ -14,6 +14,21 @@ export const STARTUPS_QUERY = defineQuery(`
     image
   }`);
 
+// Smart Query: Prioritizes "isFeatured" then "views"
+export const FEATURED_STARTUPS_QUERY = defineQuery(`
+*[_type == 'startup' && defined(slug.current)] | order(isFeatured desc, views desc, _createdAt desc)[0...3]{
+  _id,
+  slug,
+  title,
+  _createdAt,
+  author ->{ _id, name, image, bio },
+  views,
+  description,
+  category,
+  image,
+  isFeatured
+}`);
+
 export const STARTUP_BY_ID_QUERY = `
 *[_type =='startup' && 
   _id == $id][0]{
