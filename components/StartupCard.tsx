@@ -4,6 +4,7 @@ import React from "react";
 import { formatDate } from "@/lib/utils";
 import { EyeIcon, ArrowUpRight, User, Calendar, Tag } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Author, Startup } from "@/sanity/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
@@ -32,10 +33,11 @@ const StartupCard = ({ post }: { post: StartupCardType }) => {
     >
       {/* Image Container */}
       <Link href={`/startup/${_id}`} className="relative aspect-[16/10] overflow-hidden bg-slate-800">
-        <img 
-          src={image} 
-          alt={title} 
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" 
+        <Image 
+          src={image || "https://placehold.co/600x400"} 
+          alt={title || "Startup Image"} 
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-110" 
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 transition-opacity duration-300 group-hover:opacity-100" />
         
@@ -78,9 +80,9 @@ const StartupCard = ({ post }: { post: StartupCardType }) => {
         {/* Footer */}
         <div className="mt-6 flex items-center justify-between border-t border-white/5 pt-5">
           <Link href={`/user/${author?._id}`} className="flex items-center gap-2.5 group/author">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-slate-800 overflow-hidden transition-transform group-hover/author:scale-110">
+            <div className="relative flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-slate-800 overflow-hidden transition-transform group-hover/author:scale-110">
               {author?.image ? (
-                <img src={author.image} alt={author.name} className="h-full w-full object-cover" />
+                <Image src={author.image} alt={author.name || "Author"} fill className="object-cover" />
               ) : (
                 <User className="size-4 text-slate-400" />
               )}
