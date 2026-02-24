@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import UserStartups from "@/components/UserStartups";
 import { StartupCardSkeleton } from "@/components/StartupCard";
-import { Mail, Github, MapPin, User, Rocket } from "lucide-react";
+import { Mail, Github, Rocket } from "lucide-react";
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;

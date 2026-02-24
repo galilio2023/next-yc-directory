@@ -21,12 +21,6 @@ declare module "next-auth" {
   }
 
   /**
-   * Usually contains information about the provider being used
-   * and also extends `TokenSet`, which is different tokens returned by OAuth Providers.
-   */
-  interface Account {}
-
-  /**
    * GitHub-specific profile interface
    */
   interface Profile {

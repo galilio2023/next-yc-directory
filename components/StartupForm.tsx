@@ -73,13 +73,22 @@ const StartupForm = () => {
     }
   };
 
-  const [_, formAction, isPending] = useActionState(handleFormSubmit, {
+  const [state, formAction, isPending] = useActionState(handleFormSubmit, {
     error: "",
     status: "INITIAL",
   });
 
+  // Suppress unused warning for state if needed, or use it for global error display
+  const globalError = state.status === "ERROR" ? state.error : null;
+
   return (
     <form action={formAction} className="space-y-10">
+      {globalError && (
+        <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium">
+          {globalError}
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-3">
           <label htmlFor="title" className="flex items-center gap-2 text-sm font-bold text-slate-300">

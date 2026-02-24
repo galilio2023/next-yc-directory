@@ -9,7 +9,6 @@ jobs:
   review:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
       pull-requests: write
 
     steps:
@@ -37,15 +36,13 @@ jobs:
 
           async function run() {
             const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-            // Using gemini-2.0-flash as requested (assuming 2.0 for the latest Flash model)
-            const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            // Using gemini-2.5-flash as requested
+            const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
-            // Get the diff of the PR
             let diff;
             try {
               diff = execSync('git diff origin/main...HEAD').toString();
             } catch (e) {
-              console.log('Error getting diff, trying alternative...');
               diff = execSync('git diff HEAD^ HEAD').toString();
             }
 
@@ -69,14 +66,11 @@ jobs:
             const response = await result.response;
             const text = response.text();
 
-            // Post the review as a comment on the PR
             const prNumber = process.env.GITHUB_EVENT_PATH ? require(process.env.GITHUB_EVENT_PATH).number : null;
             if (prNumber) {
-              const body = JSON.stringify({ body: '### 🤖 Loom AI Architect Review (Gemini 2.0 Flash)\n\n' + text });
+              const body = JSON.stringify({ body: '### 🤖 Loom AI Architect Review (Gemini 2.5 Flash)\n\n' + text });
               execSync(\`curl -s -H \"Authorization: token \${process.env.GITHUB_TOKEN}\" -X POST -d '\${body}' https://api.github.com/repos/\${process.env.GITHUB_REPOSITORY}/issues/\${prNumber}/comments\`);
               console.log('Review comment posted successfully.');
-            } else {
-              console.log('PR number not found, review text:', text);
             }
           }
           run().catch(err => { 
