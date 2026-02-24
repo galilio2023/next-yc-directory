@@ -30,6 +30,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             image,
             bio: (bio as string) || "",
           });
+        } else {
+          // Sync profile data from GitHub if the user already exists
+          await writeClient
+            .patch(existingUser._id)
+            .set({
+              name,
+              username: login,
+              email,
+              image,
+              bio: (bio as string) || existingUser.bio || "",
+            })
+            .commit();
         }
 
         return true;

@@ -20,7 +20,7 @@ const StartupForm = () => {
   const router = useRouter();
   const { toast } = useToast();
 
-  const handleFormSubmit = async (prevState: any, formData: FormData) => {
+  const handleFormSubmit = async (prevState: unknown, formData: FormData) => {
     try {
       const formValues = {
         title: formData.get("title") as string,
@@ -32,7 +32,7 @@ const StartupForm = () => {
       setErrors({});
       await formSchema.parseAsync(formValues);
 
-      const result = await createPitch(prevState, formData, pitch);
+      const result = await createPitch(prevState as Parameters<typeof createPitch>[0], formData, pitch);
 
       if (result.status === "SUCCESS") {
         toast({
