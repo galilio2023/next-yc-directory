@@ -4,9 +4,10 @@ import { auth } from "@/auth";
 import { parseServerActionResponse } from "@/lib/utils";
 import slugify from "slugify";
 import { writeClient } from "@/sanity/lib/write-client";
+import { formSchema } from "@/lib/validation";
 
 export const createPitch = async (
-  state: any,
+  state: { error: string; status: "INITIAL" | "SUCCESS" | "ERROR"; _id?: string },
   form: FormData,
   pitch: string,
 ) => {
@@ -16,11 +17,23 @@ export const createPitch = async (
       error: "Not signed in",
       status: "ERROR",
     });
+
   const { title, description, category, link } = Object.fromEntries(
     Array.from(form).filter(([key]) => key !== "pitch"),
   );
+
   const slug = slugify(title as string, { lower: true, strict: true });
+
   try {
+    // Server-side validation
+    await formSchema.parseAsync({
+      title,
+      description,
+      category,
+      link,
+      pitch,
+    });
+
     const startup = {
       title,
       description,
@@ -36,7 +49,9 @@ export const createPitch = async (
       },
       pitch,
     };
+
     const result = await writeClient.create({ _type: "startup", ...startup });
+
     return parseServerActionResponse({
       ...result,
       error: "",

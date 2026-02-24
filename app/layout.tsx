@@ -1,60 +1,18 @@
-import localFont from "next/font/local";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import React from "react";
 import "easymde/dist/easymde.min.css";
 import { Metadata } from "next";
 import { Toaster } from "@/components/ui/toaster";
+import { cn } from "@/lib/utils";
+import { SanityLive } from "@/sanity/lib/live";
 
 export const metadata: Metadata = {
-  title: "YC Directory",
-  description: "Pitch, Vote and Grow",
+  title: "Loom | Pitch, Vote and Grow",
+  description: "The ultimate platform for the next generation of founders.",
 };
 
-const workSans = localFont({
-  src: [
-    {
-      path: "./fonts/WorkSans-Black.ttf",
-      weight: "900",
-      style: "normal",
-    },
-    {
-      path: "./fonts/WorkSans-ExtraBold.ttf",
-      weight: "800",
-      style: "normal",
-    },
-    {
-      path: "./fonts/WorkSans-Bold.ttf",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "./fonts/WorkSans-SemiBold.ttf",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "./fonts/WorkSans-Medium.ttf",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "./fonts/WorkSans-Regular.ttf",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "./fonts/WorkSans-Thin.ttf",
-      weight: "200",
-      style: "normal",
-    },
-    {
-      path: "./fonts/WorkSans-ExtraLight.ttf",
-      weight: "100",
-      style: "normal",
-    },
-  ],
-  variable: "--font-work-sans",
-});
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export default function RootLayout({
   children,
@@ -62,10 +20,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={workSans.variable}>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          "min-h-screen bg-slate-950 font-sans antialiased",
+          inter.variable,
+        )}
+      >
         {children}
         <Toaster />
+        <SanityLive />
       </body>
     </html>
   );
